@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Page Not Found | H4 B.I.T.T.L.E{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column justify-content-center align-items-center vh-100">
+    <h1 class="display-4 text-danger">404</h1>
+    <p class="lead">Oops! The page you're looking for doesn't exist.</p>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary mt-3">Return to Dashboard</a>
+</div>
+{% endblock %}

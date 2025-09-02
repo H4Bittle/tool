@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Profile | H4 B.I.T.T.L.E{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">Pentester Profile</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Personal Info</h5>
+            <form id="profileForm">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="profile_name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="profile_name" placeholder="Jane Doe" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="profile_role" class="form-label">Role</label>
+                        <input type="text" class="form-control" id="profile_role" placeholder="Security Analyst" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="profile_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="profile_email" placeholder="jane@example.com" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Update Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Assigned Applications</h5>
+            <ul id="assignedApps" class="list-group">
+                <!-- Populated by JS -->
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Placeholder for JS logic to populate assigned apps and load profile data
+    document.addEventListener("DOMContentLoaded", function () {
+        // Future AJAX to load profile info here
+        // document.getElementById('profile_name').value = "...";
+    });
+</script>
+{% endblock %}

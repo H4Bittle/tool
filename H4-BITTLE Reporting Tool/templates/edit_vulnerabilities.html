@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Vulnerabilities | H4 B.I.T.T.L.E{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4 text-center">Edit Vulnerabilities - {{ app.name }}</h2>
+
+  <form id="editVulnsForm" enctype="multipart/form-data">
+    <!-- CSRF + App context -->
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" id="app_id" value="{{ app.id }}">
+
+    <div id="vulnGroup">
+      {% for vuln in vulnerabilities %}
+      <div class="vuln-entry border rounded p-3 mb-4">
+        <!-- (optional) index for server-side mapping -->
+        <input type="hidden" name="vuln_index" value="{{ loop.index0 }}">
+
+        <div class="mb-3">
+          <label class="form-label">Vulnerability ID</label>
+          <input type="text" class="form-control" name="vuln_id" value="{{ vuln.id }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Title</label>
+          <input type="text" class="form-control" name="title" value="{{ vuln.title }}">
+        </div>
+
+        <div class="row mb-3">
+          <div class="col">
+            <label class="form-label">CVSS Score</label>
+            <input type="number" step="0.1" min="0" max="10" class="form-control" name="cvss" value="{{ vuln.cvss }}">
+          </div>
+          <div class="col">
+            <label class="form-label">CVSS Vector</label>
+            <input type="text" class="form-control" name="cvss_vector" value="{{ vuln.cvss_vector }}">
+          </div>
+          <div class="col">
+            <label class="form-label">Severity</label>
+            {% set severity = (vuln.severity or '')|lower %}
+            <select class="form-select" name="severity">
+              <option value="">Select</option>
+              <option value="Critical" {% if severity=='critical' %}selected{% endif %}>Critical</option>
+              <option value="High" {% if severity=='high' %}selected{% endif %}>High</option>
+              <option value="Medium" {% if severity=='medium' %}selected{% endif %}>Medium</option>
+              <option value="Low" {% if severity=='low' %}selected{% endif %}>Low</option>
+              <option value="Info" {% if severity=='info' %}selected{% endif %}>Info</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Affected URL</label>
+          <input type="url" class="form-control" name="url" value="{{ vuln.url }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Summary</label>
+          <textarea class="form-control" name="summary" rows="2">{{ vuln.summary }}</textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="description" rows="3">{{ vuln.description }}</textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Business Impact</label>
+          <textarea class="form-control" name="impact" rows="2">{{ vuln.impact }}</textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Recommendation</label>
+          <textarea class="form-control" name="recommendation" rows="2">{{ vuln.recommendation }}</textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">CVE / CWE</label>
+          <input type="text" class="form-control" name="cwe" value="{{ vuln.cwe }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">References</label>
+          <textarea class="form-control" name="reference" rows="2">{{ vuln.reference }}</textarea>
+        </div>
+
+        <hr>
+        <div class="mb-3">
+          <h6>Steps to Reproduce (Max 12)</h6>
+          <div class="stepsContainer">
+            {% if vuln.steps and vuln.steps is iterable %}
+              {% for s in vuln.steps %}
+              <div class="mb-2 step-wrap">
+                <label class="form-label">Step {{ loop.index }}</label>
+                <textarea class="form-control mb-2" name="step_desc" rows="2">{{ s.description }}</textarea>
+
+                {% if s.screenshot %}
+                  <p class="small mb-1">
+                    Existing Screenshot:
+                    <a href="/static/screenshots/{{ s.screenshot }}" target="_blank">{{ s.screenshot }}</a>
+                  </p>
+                {% endif %}
+                <input type="file" class="form-control" name="step_img" accept="image/*">
+              </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary addStep">+ Add Step</button>
+        </div>
+
+        <button type="button" class="btn btn-outline-danger remove-vuln">- Remove This Vulnerability</button>
+      </div>
+      {% endfor %}
+    </div>
+
+    <button type="button" class="btn btn-outline-secondary mb-3" id="addVulnBtn">+ Add Another Vulnerability</button>
+    <br>
+    <button type="submit" class="btn btn-primary">Save Vulnerabilities</button>
+    <a href="{{ url_for('applications_page') }}" class="btn btn-secondary ms-2">Cancel</a>
+  </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const vulnGroup = document.getElementById("vulnGroup");
+
+  // Add another vulnerability (clone-first pattern, like add_vulnerability.html)
+  document.getElementById("addVulnBtn").addEventListener("click", function () {
+    const first = vulnGroup.firstElementChild;
+    if (!first) return;
+
+    const clone = first.cloneNode(true);
+
+    // clear all inputs/textareas/selects
+    clone.querySelectorAll("input, textarea, select").forEach(el => {
+      if (el.type === "hidden") return; // keep hidden index if you want, we’ll reindex later anyway
+      if (el.type === "file") { el.value = ""; return; }
+      el.value = "";
+    });
+
+    // wipe steps
+    const stepsDiv = clone.querySelector(".stepsContainer");
+    if (stepsDiv) stepsDiv.innerHTML = "";
+
+    vulnGroup.appendChild(clone);
+    reindexVulnEntries();
+  });
+
+  // Delegate click events for remove & addStep
+  vulnGroup.addEventListener("click", function (e) {
+    // Remove a vulnerability block
+    if (e.target.classList.contains("remove-vuln")) {
+      if (vulnGroup.children.length > 1) {
+        e.target.closest(".vuln-entry").remove();
+        reindexVulnEntries();
+      }
+    }
+
+    // Add step inside a specific vuln block
+    if (e.target.classList.contains("addStep")) {
+      const stepsDiv = e.target.previousElementSibling; // .stepsContainer
+      if (!stepsDiv) return;
+
+      const stepCount = stepsDiv.querySelectorAll(".step-wrap").length;
+      if (stepCount >= 12) {
+        alert("Maximum 12 steps allowed.");
+        return;
+      }
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "mb-2 step-wrap";
+      wrapper.innerHTML = `
+        <label class="form-label">Step ${stepCount + 1}</label>
+        <textarea class="form-control mb-2" name="step_desc" rows="2" placeholder="Step description"></textarea>
+        <input type="file" class="form-control" name="step_img" accept="image/*">
+      `;
+      stepsDiv.appendChild(wrapper);
+    }
+  });
+
+  // Optional: reindex hidden vuln_index fields after add/remove so the server-side can map them
+  function reindexVulnEntries() {
+    [...vulnGroup.querySelectorAll(".vuln-entry")].forEach((block, idx) => {
+      const idxField = block.querySelector("input[name='vuln_index']");
+      if (idxField) idxField.value = idx;
+    });
+  }
+
+  // NOTE: Submission wiring depends on your backend.
+  // Below is a collector similar to add_vulnerability.html. Adjust the fetch URL to your edit endpoint.
+  document.getElementById("editVulnsForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const appId = document.getElementById("app_id").value;
+    const formData = new FormData();
+    formData.append("application_id", appId);
+    formData.append("csrf_token", document.getElementById("csrf_token").value);
+
+    const allEntries = [];
+
+    vulnGroup.querySelectorAll(".vuln-entry").forEach((entry, vIdx) => {
+      const vuln = {
+        id: entry.querySelector("input[name='vuln_id']").value,
+        title: entry.querySelector("input[name='title']").value,
+        cvss: entry.querySelector("input[name='cvss']").value,
+        cvss_vector: entry.querySelector("input[name='cvss_vector']").value,
+        severity: entry.querySelector("select[name='severity']").value,
+        url: entry.querySelector("input[name='url']").value,
+        summary: entry.querySelector("textarea[name='summary']").value,
+        description: entry.querySelector("textarea[name='description']").value,
+        impact: entry.querySelector("textarea[name='impact']").value,
+        recommendation: entry.querySelector("textarea[name='recommendation']").value,
+        cwe: entry.querySelector("input[name='cwe']").value,
+        reference: entry.querySelector("textarea[name='reference']").value,
+        steps: []
+      };
+
+      const stepDescs = entry.querySelectorAll("textarea[name='step_desc']");
+      const stepImgs = entry.querySelectorAll("input[name='step_img']");
+
+      stepDescs.forEach((descEl, i) => {
+        const imgFile = stepImgs[i]?.files?.[0];
+        const screenshotName = imgFile ? `edit_vuln${vIdx}_step${i}_${imgFile.name}` : (stepImgs[i]?.dataset?.existing || "");
+        if (imgFile) {
+          formData.append(screenshotName, imgFile);
+        }
+        vuln.steps.push({
+          description: descEl.value,
+          screenshot: screenshotName
+        });
+      });
+
+      allEntries.push(vuln);
+    });
+
+    formData.append("vulnerabilities", JSON.stringify(allEntries));
+
+    // TODO: change URL to your actual edit endpoint, e.g. `/applications/${appId}/vulnerabilities/update`
+    fetch(`/applications/${appId}/vulnerabilities/update`, {
+      method: "POST",
+      body: formData
+    })
+    .then(async res => {
+      if (!res.ok) {
+        const raw = await res.text();
+        console.error("Error response:", raw);
+        alert("Server error occurred.");
+        return;
+      }
+      return res.json();
+    })
+    .then(data => {
+      if (data?.success) {
+        alert("Vulnerabilities saved successfully!");
+        window.location.href = "/applications";
+      } else {
+        alert("Failed to save vulnerabilities.");
+      }
+    })
+    .catch(err => {
+      console.error("Error submitting form:", err);
+      alert("Submission error");
+    });
+  });
+});
+</script>
+{% endblock %}

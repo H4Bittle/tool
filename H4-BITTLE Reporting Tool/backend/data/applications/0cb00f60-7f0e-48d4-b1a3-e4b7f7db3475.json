@@ -1,0 +1,29 @@
+{
+  "id": "0cb00f60-7f0e-48d4-b1a3-e4b7f7db3475",
+  "name": "Test_GW",
+  "description": "",
+  "start_date": "15-08-2025",
+  "end_date": "29-08-2025",
+  "status": "in-progress",
+  "app_details": [
+    {
+      "url": "http://example3.com",
+      "version": "2.5",
+      "name": "test_app3"
+    }
+  ],
+  "pentesters": [
+    {
+      "name": "pen3",
+      "role": "admin",
+      "email": "test3@test.com"
+    }
+  ],
+  "test_credentials": [
+    {
+      "name": "gwdeloitte-appsec",
+      "role": "admin",
+      "email": "test3@test.com"
+    }
+  ]
+}

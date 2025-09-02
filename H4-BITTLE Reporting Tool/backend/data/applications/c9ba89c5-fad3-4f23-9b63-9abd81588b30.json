@@ -1,0 +1,59 @@
+{
+  "id": "c9ba89c5-fad3-4f23-9b63-9abd81588b30",
+  "name": "Pre Mature Assessment of Null Application 3",
+  "description": "",
+  "start_date": "15-08-2025",
+  "end_date": "29-08-2025",
+  "status": "in-progress",
+  "app_details": [
+    {
+      "url": "http://example3.com",
+      "version": "2.5",
+      "name": "test_app3"
+    },
+    {
+      "url": "http://example3.com",
+      "version": "2.5",
+      "name": "test_app3"
+    },
+    {
+      "url": "http://example3.com",
+      "version": "2.5",
+      "name": "test_app3"
+    }
+  ],
+  "pentesters": [
+    {
+      "name": "pen3",
+      "role": "admin",
+      "email": "test3@test.com"
+    },
+    {
+      "name": "pen3",
+      "role": "admin",
+      "email": "test3@test.com"
+    },
+    {
+      "name": "pen3",
+      "role": "admin",
+      "email": "test3@test.com"
+    }
+  ],
+  "test_credentials": [
+    {
+      "name": "gwdeloitte-appsec",
+      "role": "admin",
+      "email": "test3@test.com"
+    },
+    {
+      "name": "gwdeloitte-appsec",
+      "role": "admin",
+      "email": "test3@test.com"
+    },
+    {
+      "name": "gwdeloitte-appsec",
+      "role": "admin",
+      "email": "test3@test.com"
+    }
+  ]
+}

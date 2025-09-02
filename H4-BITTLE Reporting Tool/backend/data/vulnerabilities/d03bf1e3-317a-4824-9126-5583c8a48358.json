@@ -1,0 +1,46 @@
+[
+  {
+    "id": "A1",
+    "title": "asdasd",
+    "cvss": "6.0",
+    "cvss_vector": "asdasd",
+    "severity": "Medium",
+    "url": "http://example.com",
+    "summary": "qwertyuiop[]",
+    "description": "qwertyuiop[]\\",
+    "impact": "qwertyuiopokjjklkjhgfdsa",
+    "recommendation": "qwetyuoplkjhgfdsazxcvbnm,",
+    "cwe": "2024",
+    "reference": "qwertyuiopplkjhgfdsasdfghkl;'.,mnbvcxz",
+    "steps": [
+      {
+        "description": "qwertyiohgfghjkmnbvcwetyhnbxseryujm",
+        "screenshot": "vuln0_step0_xss.png"
+      }
+    ]
+  },
+  {
+    "id": "A2",
+    "title": "SQLI",
+    "cvss": "8",
+    "cvss_vector": "asdasd",
+    "severity": "High",
+    "url": "http://example1.com",
+    "summary": "qwehgfd,mnbvcxz",
+    "description": "wdv45thn7uik,9p;",
+    "impact": "sw2wedvgt5thnmki9olp0p;/",
+    "recommendation": "xs23ef6yhji89op0p;",
+    "cwe": "ASDASD",
+    "reference": "v5tghu8iko0p;p0ok8uhttf4rc",
+    "steps": [
+      {
+        "description": "",
+        "screenshot": "vuln1_step0_ssrf1.png"
+      },
+      {
+        "description": "lplkmoijhbuhv6tdxddzsesawwaweedtyu",
+        "screenshot": "vuln1_step1_ssrf2.png"
+      }
+    ]
+  }
+]

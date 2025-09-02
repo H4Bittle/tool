@@ -1,0 +1,290 @@
+[
+  {
+    "timestamp": "2025-08-03T14:35:15.242693",
+    "action": "Application added: Test (3d55d02f-9d52-4e4e-97e6-ef09258e2ace)"
+  },
+  {
+    "timestamp": "2025-08-03T14:37:47.203432",
+    "action": "Application added: Test (5a99bb56-2500-42d8-aae0-a0e96746552e)"
+  },
+  {
+    "timestamp": "2025-08-03T14:39:54.113093",
+    "action": "Application added: Test (24b03d28-6f80-4897-9702-efeae278db20)"
+  },
+  {
+    "timestamp": "2025-08-03T14:47:49.158270",
+    "action": "Application added: Test"
+  },
+  {
+    "timestamp": "2025-08-03T15:25:33.132912",
+    "action": "Application added: Test"
+  },
+  {
+    "timestamp": "2025-08-03T15:26:11.687482",
+    "action": "Vulnerability added to 200869fb-d1ac-4660-837e-15b61848c61a"
+  },
+  {
+    "timestamp": "2025-08-03T15:42:38.872099",
+    "action": "Application added: Test"
+  },
+  {
+    "timestamp": "2025-08-03T15:43:04.126051",
+    "action": "Vulnerability added to a763969a-1ec0-4117-bfae-bca2bbb244b8"
+  },
+  {
+    "timestamp": "2025-08-03T15:53:41.274050",
+    "action": "Application added: Test"
+  },
+  {
+    "timestamp": "2025-08-03T15:54:11.602486",
+    "action": "Vulnerability added to b1d699d7-f2c1-425f-b2b1-b503013b1c17"
+  },
+  {
+    "timestamp": "2025-08-03T17:02:49.883335",
+    "action": "Application added: Test2"
+  },
+  {
+    "timestamp": "2025-08-03T17:03:15.010493",
+    "action": "Vulnerability added to 226f5af8-8522-48fc-b8ab-c3f7e135335c"
+  },
+  {
+    "timestamp": "2025-08-03T17:51:05.723630",
+    "action": "Application added: Test3"
+  },
+  {
+    "timestamp": "2025-08-03T18:24:37.809640",
+    "action": "Application updated: ccf4008e-059b-4395-999f-e319e3a94f08"
+  },
+  {
+    "timestamp": "2025-08-03T18:25:00.796731",
+    "action": "Application updated: ccf4008e-059b-4395-999f-e319e3a94f08"
+  },
+  {
+    "timestamp": "2025-08-03T19:45:43.119026",
+    "action": "Application added: TESTING"
+  },
+  {
+    "timestamp": "2025-08-03T20:25:14.020586",
+    "action": "Application updated: 200869fb-d1ac-4660-837e-15b61848c61a"
+  },
+  {
+    "timestamp": "2025-08-03T20:51:53.728025",
+    "action": "Application updated: 200869fb-d1ac-4660-837e-15b61848c61a"
+  },
+  {
+    "timestamp": "2025-08-03T20:53:10.246436",
+    "action": "Application updated: 200869fb-d1ac-4660-837e-15b61848c61a"
+  },
+  {
+    "timestamp": "2025-08-05T17:31:13.779351",
+    "action": "Application added: Test3"
+  },
+  {
+    "timestamp": "2025-08-05T23:01:24.309829",
+    "action": "Application added: Test_GW"
+  },
+  {
+    "timestamp": "2025-08-05T23:07:30.710732",
+    "action": "Vulnerability added to 9cec31d0-8fcb-4bfc-8af9-edddc2853034"
+  },
+  {
+    "timestamp": "2025-08-05T23:07:30.757629",
+    "action": "Vulnerability added to 9cec31d0-8fcb-4bfc-8af9-edddc2853034"
+  },
+  {
+    "timestamp": "2025-08-06T19:33:50.239863",
+    "action": "Application added: Test_GW"
+  },
+  {
+    "timestamp": "2025-08-06T19:37:35.364337",
+    "action": "Vulnerability added to bc690af7-e1fc-4c0f-9908-02e8b063a81c"
+  },
+  {
+    "timestamp": "2025-08-06T19:42:31.503357",
+    "action": "Application added: Test_GW2"
+  },
+  {
+    "timestamp": "2025-08-06T20:57:34.481838",
+    "action": "Application added: Test_GW3"
+  },
+  {
+    "timestamp": "2025-08-06T20:59:23.421340",
+    "action": "Vulnerability added to b70cb3f2-1ed8-42eb-aaba-a3132dd3ff59"
+  },
+  {
+    "timestamp": "2025-08-06T20:59:23.461378",
+    "action": "Vulnerability added to b70cb3f2-1ed8-42eb-aaba-a3132dd3ff59"
+  },
+  {
+    "timestamp": "2025-08-06T21:02:59.294698",
+    "action": "Application added: Test_GW4"
+  },
+  {
+    "timestamp": "2025-08-06T21:05:07.513967",
+    "action": "Vulnerability added to f10d06c1-4740-411a-971e-6e3f0031863d"
+  },
+  {
+    "timestamp": "2025-08-06T21:05:07.562460",
+    "action": "Vulnerability added to f10d06c1-4740-411a-971e-6e3f0031863d"
+  },
+  {
+    "timestamp": "2025-08-06T21:26:21.347321",
+    "action": "Application added: Test_GW5"
+  },
+  {
+    "timestamp": "2025-08-06T21:27:48.224323",
+    "action": "Vulnerability added to f7058d85-e3bf-437e-bd38-88cd4cb36739"
+  },
+  {
+    "timestamp": "2025-08-06T21:27:48.278767",
+    "action": "Vulnerability added to f7058d85-e3bf-437e-bd38-88cd4cb36739"
+  },
+  {
+    "timestamp": "2025-08-06T21:31:30.682070",
+    "action": "Application added: Test_GW6"
+  },
+  {
+    "timestamp": "2025-08-06T21:36:40.166089",
+    "action": "Application added: Test_GW6"
+  },
+  {
+    "timestamp": "2025-08-06T21:36:58.338644",
+    "action": "Application added: Test_GW7"
+  },
+  {
+    "timestamp": "2025-08-06T21:43:37.294417",
+    "action": "Application added: Test_GW"
+  },
+  {
+    "timestamp": "2025-08-06T21:44:58.937612",
+    "action": "Vulnerability added to b6ed5f91-5c99-4ce3-8aee-58cc607c006f"
+  },
+  {
+    "timestamp": "2025-08-06T21:44:59.005404",
+    "action": "Vulnerability added to b6ed5f91-5c99-4ce3-8aee-58cc607c006f"
+  },
+  {
+    "timestamp": "2025-08-07T19:04:54.388584",
+    "action": "Application added: Test_GW"
+  },
+  {
+    "timestamp": "2025-08-07T19:20:34.587507",
+    "action": "Application added: Test_GW6"
+  },
+  {
+    "timestamp": "2025-08-07T19:23:04.415218",
+    "action": "Application updated: 1cc5263a-9c3f-4ef1-82cb-8abdf632a0c6"
+  },
+  {
+    "timestamp": "2025-08-07T19:23:37.538122",
+    "action": "Application updated: 1cc5263a-9c3f-4ef1-82cb-8abdf632a0c6"
+  },
+  {
+    "timestamp": "2025-08-07T20:55:52.246633",
+    "action": "Application added: Test-GW-HELLO"
+  },
+  {
+    "timestamp": "2025-08-07T20:56:38.894175",
+    "action": "Vulnerability added to 3a2c47ff-2bd7-46bc-8b2a-6aa22e2287da"
+  },
+  {
+    "timestamp": "2025-08-07T21:04:53.403368",
+    "action": "Application added: Test-GW-HELLO"
+  },
+  {
+    "timestamp": "2025-08-07T21:13:19.857002",
+    "action": "Application added: Test-GW-HELLO"
+  },
+  {
+    "timestamp": "2025-08-07T21:13:30.255042",
+    "action": "Application added: Test-GW-HELLO"
+  },
+  {
+    "timestamp": "2025-08-07T21:25:02.947042",
+    "action": "Application added: Test-GW-HELLO"
+  },
+  {
+    "timestamp": "2025-08-07T21:28:02.684268",
+    "action": "Application added: Test_GW6"
+  },
+  {
+    "timestamp": "2025-08-07T21:35:21.504334",
+    "action": "Application added: Test_GW6"
+  },
+  {
+    "timestamp": "2025-08-07T21:43:18.644034",
+    "action": "Application added: Test_GW6"
+  },
+  {
+    "timestamp": "2025-08-08T17:55:52.108011",
+    "action": "Application added: Test_GW0"
+  },
+  {
+    "timestamp": "2025-08-08T18:06:43.711118",
+    "action": "Application added: Test_GW0"
+  },
+  {
+    "timestamp": "2025-08-08T18:12:33.923683",
+    "action": "Vulnerabilities added for app 2abe2276-6ea5-49c0-9f41-9a2f06d22dd0"
+  },
+  {
+    "timestamp": "2025-08-08T18:19:33.956660",
+    "action": "Application added: Test_GW"
+  },
+  {
+    "timestamp": "2025-08-08T18:22:16.792154",
+    "action": "Vulnerabilities added for app 62300cd0-f42b-4022-bb2b-00657ebb6212"
+  },
+  {
+    "timestamp": "2025-08-08T18:22:17.121942",
+    "action": "Vulnerabilities added for app 62300cd0-f42b-4022-bb2b-00657ebb6212"
+  },
+  {
+    "timestamp": "2025-08-08T18:22:49.541450",
+    "action": "Application added: Test_GW2"
+  },
+  {
+    "timestamp": "2025-08-08T18:24:13.185408",
+    "action": "Vulnerabilities added for app 10afa906-ce76-426d-ad9c-0891a3264f1e"
+  },
+  {
+    "timestamp": "2025-08-08T18:43:44.813702",
+    "action": "Application updated: 10afa906-ce76-426d-ad9c-0891a3264f1e"
+  },
+  {
+    "timestamp": "2025-08-08T19:14:38.801674",
+    "action": "Application added: Test_GW6"
+  },
+  {
+    "timestamp": "2025-08-08T19:17:48.083749",
+    "action": "Vulnerabilities added for app c3f73e0f-df7d-4f3c-934e-db9b9c869570"
+  },
+  {
+    "timestamp": "2025-08-08T19:48:55.302721",
+    "action": "Application added: Pre Mature Assessment of Null Application"
+  },
+  {
+    "timestamp": "2025-08-08T19:52:42.096223",
+    "action": "Vulnerabilities added for app 579b2ac7-c29f-4beb-b9df-9070372c988c"
+  },
+  {
+    "timestamp": "2025-08-10T10:32:43.148682",
+    "action": "Application added: Pre Mature Assessment of Null Application 2"
+  },
+  {
+    "timestamp": "2025-08-10T10:35:07.727472",
+    "action": "Vulnerabilities added for app d03bf1e3-317a-4824-9126-5583c8a48358"
+  },
+  {
+    "timestamp": "2025-08-10T18:11:39.676436",
+    "action": "Vulnerabilities updated for app 579b2ac7-c29f-4beb-b9df-9070372c988c. files_saved=True"
+  },
+  {
+    "timestamp": "2025-08-10T19:21:33.394156",
+    "action": "Application added: Pre Mature Assessment of Null Application 3"
+  },
+  {
+    "timestamp": "2025-09-02T21:21:27.792730",
+    "action": "Application added: Test_GW"
+  }
+]

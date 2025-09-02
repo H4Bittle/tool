@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Vulnerabilities Summary | H4 B.I.T.T.L.E{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">Vulnerabilities Summary</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Severity</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Critical</td><td>{{ summary.critical }}</td></tr>
+                    <tr><td>High</td><td>{{ summary.high }}</td></tr>
+                    <tr><td>Medium</td><td>{{ summary.medium }}</td></tr>
+                    <tr><td>Low</td><td>{{ summary.low }}</td></tr>
+                    <tr><td>Info</td><td>{{ summary.info }}</td></tr>
+                    <tr class="table-secondary"><th>Total</th><th>{{ summary.total }}</th></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

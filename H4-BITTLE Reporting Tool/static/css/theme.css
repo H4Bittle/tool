@@ -1,0 +1,49 @@
+/* Dark and Light Mode Toggle Support (optional future use) */
+body.dark-mode {
+    background-color: #121212;
+    color: #e4e4e4;
+}
+
+body.dark-mode .card {
+    background-color: #1e1e1e;
+    border-color: #333;
+}
+
+body.dark-mode .navbar,
+body.dark-mode footer {
+    background-color: #222;
+    color: #ccc;
+}
+
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background-color: #2a2a2a;
+    color: #e4e4e4;
+    border-color: #444;
+}
+
+/* Severity Badges */
+.badge-critical {
+    background-color: #b30000;
+    color: white;
+}
+
+.badge-high {
+    background-color: #e55300;
+    color: white;
+}
+
+.badge-medium {
+    background-color: #ffc107;
+    color: black;
+}
+
+.badge-low {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.badge-info {
+    background-color: #6c757d;
+    color: white;
+}

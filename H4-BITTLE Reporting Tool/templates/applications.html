@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Applications List | H4 B.I.T.T.L.E{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4 text-center">Applications List</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 40%;">Main Application Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="fw-bold">{{ app.name }}</span>
+                            <button class="btn btn-sm btn-outline-secondary toggle-vulns" data-app-id="{{ app.id }}" style="font-size: 0.8rem;">
+                                ▶
+                            </button>
+                        </div>
+                        <div class="vulns-list mt-2" id="vulns-{{ app.id }}" style="display: none;">
+                            <strong>Vulnerabilities</strong>
+                            <ul class="list-group mt-1">
+                                <li class="list-group-item">Loading...</li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>{{ app.start_date }}</td>
+                    <td>{{ app.end_date }}</td>
+                    <td><span class="badge bg-secondary text-capitalize">{{ app.status }}</span></td>
+                    <td>
+                        <a href="/applications/{{ app.id }}/edit" class="btn btn-outline-primary btn-sm">Edit Application</a>
+                        <a href="/edit_vulnerabilities/{{ app.id }}" class="btn btn-outline-dark btn-sm">Edit Vulnerabilities</a>
+                        <button class="btn btn-outline-success btn-sm" onclick="exportDocx('{{ app.id }}')">Export DOCX</button>
+                        <button class="btn btn-outline-info btn-sm" onclick="exportExcel('{{ app.id }}')">Export Excel</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+  <div id="exportToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMessage">
+        Export successful!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.toggle-vulns').forEach(button => {
+            button.addEventListener('click', function () {
+                const appId = this.dataset.appId;
+                const listContainer = document.getElementById(`vulns-${appId}`);
+                const list = listContainer.querySelector("ul");
+
+                if (listContainer.style.display === 'none') {
+                    fetch(`/applications/${appId}/vulnerabilities`)
+                        .then(res => res.json())
+                        .then(data => {
+                            list.innerHTML = '';
+                            if (data.length === 0) {
+                                list.innerHTML = '<li class="list-group-item">No vulnerabilities added</li>';
+                            } else {
+                                data.forEach(vuln => {
+                                    const li = document.createElement('li');
+                                    li.className = 'list-group-item';
+                                    li.textContent = `${vuln.title || vuln.name || 'Untitled Vulnerability'} (Severity: ${vuln.severity || 'N/A'})`;
+                                    list.appendChild(li);
+                                });
+                            }
+                        });
+                    listContainer.style.display = 'block';
+                    this.innerHTML = `▼`;
+                } else {
+                    listContainer.style.display = 'none';
+                    this.innerHTML = `▶`;
+                }
+            });
+        });
+    });
+
+    function showToast(message) {
+        const toastBody = document.getElementById('toastMessage');
+        toastBody.textContent = message;
+
+        const toastEl = document.getElementById('exportToast');
+        const bsToast = new bootstrap.Toast(toastEl);
+        bsToast.show();
+    }
+
+    function exportDocx(appId) {
+        fetch(`/export/word/${appId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.path) {
+                    window.open(data.path, '_blank');
+                    showToast("✅ Word report exported: " + data.path);
+                } else {
+                    showToast("❌ Failed to generate Word report.");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast("❌ Error exporting Word report.");
+            });
+    }
+
+    function exportExcel(appId) {
+        fetch(`/export/excel/${appId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.path) {
+                    window.open(data.path, '_blank');
+                    showToast("✅ Excel report exported: " + data.path);
+                } else {
+                    showToast("❌ Failed to generate Excel report.");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast("❌ Error exporting Excel report.");
+            });
+    }
+</script>
+{% endblock %}

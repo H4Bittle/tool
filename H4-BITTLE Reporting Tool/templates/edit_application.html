@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Application | H4 B.I.T.T.L.E{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">Edit Application</h2>
+
+    <script>
+        document.cookie = "csrf_access_token={{ csrf_token() }}";
+    </script>
+
+    <form id="editAppForm">
+        <div class="mb-3">
+            <label class="form-label">Main Application Name</label>
+            <input type="text" class="form-control" id="app_name" value="{{ application.name }}" required>
+        </div>
+
+        <h5 class="mt-4">Applications Under Scope</h5>
+        <div id="appDetailsGroup">
+            {% for a in application.app_details %}
+            <div class="row g-2 align-items-center mb-2">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="app_url" value="{{ a.url }}" placeholder="Application URL" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="app_version" value="{{ a.version }}" placeholder="Version" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="app_display_name" value="{{ a.name }}" placeholder="App Display Name" required>
+                </div>
+                <div class="col-md-1 d-flex">
+                    <button class="btn btn-outline-secondary me-1 add-app-details" type="button">+</button>
+                    <button class="btn btn-outline-danger remove-app-details" type="button">-</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Start Date</label>
+            <input type="date" class="form-control" id="start_date" value="{{ application.start_date }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">End Date</label>
+            <input type="date" class="form-control" id="end_date" value="{{ application.end_date }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-control" id="status" required>
+                <option value="in-progress" {% if application.status == 'in-progress' %}selected{% endif %}>In Progress</option>
+                <option value="completed" {% if application.status == 'completed' %}selected{% endif %}>Completed</option>
+                <option value="on-hold" {% if application.status == 'on-hold' %}selected{% endif %}>On Hold</option>
+                <option value="in-pipeline" {% if application.status == 'in-pipeline' %}selected{% endif %}>In Pipeline</option>
+                <option value="cancelled" {% if application.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+        </div>
+
+        <h5 class="mt-4">Pentester Details</h5>
+        <div id="pentesterGroup">
+            {% for p in application.pentesters %}
+            <div class="row g-2 align-items-center mb-2">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="pentester_name" value="{{ p.name }}" placeholder="Name" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="pentester_role" value="{{ p.role }}" placeholder="Role" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="email" class="form-control" name="pentester_email" value="{{ p.email }}" placeholder="Email" required>
+                </div>
+                <div class="col-md-2 d-flex">
+                    <button class="btn btn-outline-secondary me-1 add-pentester" type="button">+</button>
+                    <button class="btn btn-outline-danger remove-pentester" type="button">-</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h5 class="mt-4">Testing Credentials</h5>
+        <div id="credentialsGroup">
+            {% for c in application.test_credentials %}
+            <div class="row g-2 align-items-center mb-2">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="cred_name" value="{{ c.name }}" placeholder="Username" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="cred_role" value="{{ c.role }}" placeholder="Role" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="email" class="form-control" name="cred_email" value="{{ c.email }}" placeholder="Email-ID" required>
+                </div>
+                <div class="col-md-2 d-flex">
+                    <button class="btn btn-outline-secondary me-1 add-cred" type="button">+</button>
+                    <button class="btn btn-outline-danger remove-cred" type="button">-</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-4">Update Application</button>
+    </form>
+</div>
+
+<script>
+    function getCSRFToken() {
+        return document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrf_access_token='))
+            ?.split('=')[1] || '';
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("editAppForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const urls = Array.from(document.getElementsByName("app_url")).map(input => input.value);
+            const versions = Array.from(document.getElementsByName("app_version")).map(input => input.value);
+            const displayNames = Array.from(document.getElementsByName("app_display_name")).map(input => input.value);
+
+            const app_details = urls.map((url, i) => ({
+                url,
+                version: versions[i],
+                name: displayNames[i]
+            }));
+
+            const pentesters = [];
+            const names = document.getElementsByName("pentester_name");
+            const roles = document.getElementsByName("pentester_role");
+            const emails = document.getElementsByName("pentester_email");
+
+            for (let i = 0; i < names.length; i++) {
+                pentesters.push({
+                    name: names[i].value,
+                    role: roles[i].value,
+                    email: emails[i].value
+                });
+            }
+
+            const credentials = [];
+            const credNames = document.getElementsByName("cred_name");
+            const credRoles = document.getElementsByName("cred_role");
+            const credEmails = document.getElementsByName("cred_email");
+
+            for (let i = 0; i < credNames.length; i++) {
+                credentials.push({
+                    name: credNames[i].value,
+                    role: credRoles[i].value,
+                    email: credEmails[i].value
+                });
+            }
+
+            const payload = {
+                id: "{{ application.id }}",
+                name: document.getElementById("app_name").value,
+                start_date: document.getElementById("start_date").value,
+                end_date: document.getElementById("end_date").value,
+                status: document.getElementById("status").value,
+                app_details: app_details,
+                pentesters: pentesters,
+                test_credentials: credentials
+            };
+
+            fetch(`/api/applications/{{ application.id }}/update`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Server returned " + res.status);
+                return res.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/applications";
+                } else {
+                    alert("Update failed: " + (data.message || ""));
+                }
+            })
+            .catch(err => {
+                console.error("Update fetch error:", err);
+                alert("Failed to send update request.");
+            });
+        });
+
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("add-pentester")) {
+                const group = document.getElementById("pentesterGroup");
+                const clone = e.target.closest(".row").cloneNode(true);
+                group.appendChild(clone);
+            } else if (e.target.classList.contains("remove-pentester")) {
+                const group = document.getElementById("pentesterGroup");
+                if (group.children.length > 1) {
+                    e.target.closest(".row").remove();
+                }
+            } else if (e.target.classList.contains("add-app-details")) {
+                const group = document.getElementById("appDetailsGroup");
+                const clone = e.target.closest(".row").cloneNode(true);
+                group.appendChild(clone);
+            } else if (e.target.classList.contains("remove-app-details")) {
+                const group = document.getElementById("appDetailsGroup");
+                if (group.children.length > 1) {
+                    e.target.closest(".row").remove();
+                }
+            } else if (e.target.classList.contains("add-cred")) {
+                const group = document.getElementById("credentialsGroup");
+                const clone = e.target.closest(".row").cloneNode(true);
+                group.appendChild(clone);
+            } else if (e.target.classList.contains("remove-cred")) {
+                const group = document.getElementById("credentialsGroup");
+                if (group.children.length > 1) {
+                    e.target.closest(".row").remove();
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

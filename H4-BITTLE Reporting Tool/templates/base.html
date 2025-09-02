@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}H4 B.I.T.T.L.E{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-light">
+
+{% if request.endpoint != 'login' %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="{{ url_for('dashboard') }}">H4 B.I.T.T.L.E</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+            <ul class="navbar-nav d-flex align-items-center gap-2">
+                <li class="nav-item">
+                    <a class="btn btn-outline-light btn-sm" href="{{ url_for('dashboard') }}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-light btn-sm" href="{{ url_for('applications_page') }}">View Applications</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-light btn-sm" href="{{ url_for('add_application_page') }}">Add Application</a>
+                </li>
+                <li class="nav-item">
+                    <form action="{{ url_for('logout') }}" method="post" class="d-inline">
+                        <button class="btn btn-outline-danger btn-sm" type="submit">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endif %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

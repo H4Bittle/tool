@@ -1,0 +1,165 @@
+[
+  {
+    "id": "V-0001",
+    "title": "SQL Injection (Union-Based)",
+    "cvss": "8.8",
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+    "severity": "High",
+    "url": "",
+    "summary": "Unsanitized input concatenated into SQL queries allows data extraction and modification.",
+    "description": "The parameter is directly embedded into a SQL statement without proper parameterization or input validation, enabling UNION-based injection to enumerate database contents.",
+    "impact": "Attacker can access or modify sensitive data, including user records and credentials (hashed).",
+    "recommendation": "Use parameterized queries (prepared statements), enforce server-side validation, and adopt least-privilege DB accounts.",
+    "cwe": "CWE-89",
+    "reference": "https://owasp.org/Top10/A03_2021-Injection/",
+    "steps": [
+      {"description": "Intercept request and inject `' UNION SELECT null--` to confirm injection point.", "screenshot": ""},
+      {"description": "Extract table names using `UNION SELECT table_name FROM information_schema.tables--`.", "screenshot": ""},
+      {"description": "Confirm data exposure and report affected tables/columns.", "screenshot": ""}
+    ]
+  },
+  {
+    "id": "V-0002",
+    "title": "Cross-Site Scripting (Reflected)",
+    "cvss": "6.1",
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+    "severity": "Medium",
+    "url": "",
+    "summary": "Unescaped user input is reflected in the response, enabling JavaScript execution in the victim’s browser.",
+    "description": "The application reflects attacker-controlled input without output encoding. A crafted link causes the victim’s browser to execute arbitrary script.",
+    "impact": "Session theft, user redirection, CSRF via JavaScript, and phishing.",
+    "recommendation": "Apply context-aware output encoding, validate/normalize input, and set CSP with nonces.",
+    "cwe": "CWE-79",
+    "reference": "https://owasp.org/Top10/A03_2021-Injection/",
+    "steps": [
+      {"description": "Inject payload `<script>alert(1)</script>` in the vulnerable parameter.", "screenshot": ""},
+      {"description": "Confirm alert execution and capture the reflected vector.", "screenshot": ""}
+    ]
+  },
+  {
+    "id": "V-0003",
+    "title": "Cross-Site Scripting (Stored)",
+    "cvss": "7.4",
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N",
+    "severity": "High",
+    "url": "",
+    "summary": "Malicious script stored on the server executes in every viewer’s browser.",
+    "description": "User-supplied content is stored and rendered without sanitization/encoding, leading to persistent script execution.",
+    "impact": "Mass compromise of user sessions, account takeover, and data exfiltration.",
+    "recommendation": "Sanitize/encode stored content, use an allowlist HTML sanitizer, and implement CSP.",
+    "cwe": "CWE-79",
+    "reference": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+    "steps": [
+      {"description": "Post a comment with `<img src=x onerror=alert(1)>`.", "screenshot": ""},
+      {"description": "Reload page as another user; confirm payload persists and runs.", "screenshot": ""}
+    ]
+  },
+  {
+    "id": "V-0004",
+    "title": "Insecure Direct Object Reference (IDOR)",
+    "cvss": "7.1",
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N",
+    "severity": "High",
+    "url": "",
+    "summary": "Object identifiers are predictable and access control is missing at the object level.",
+    "description": "Changing an ID parameter grants access to another user’s resource due to missing server-side authorization checks.",
+    "impact": "Unauthorized data access or manipulation across tenants/accounts.",
+    "recommendation": "Enforce object-level authorization, use non-guessable identifiers, and validate ownership on every request.",
+    "cwe": "CWE-639",
+    "reference": "https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/",
+    "steps": [
+      {"description": "Login as User A and capture request to `/resource?id=1001`.", "screenshot": ""},
+      {"description": "Modify to `/resource?id=1002`; observe leakage of User B’s data.", "screenshot": ""}
+    ]
+  },
+  {
+    "id": "V-0005",
+    "title": "Broken Authentication (Session Fixation)",
+    "cvss": "7.5",
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N",
+    "severity": "High",
+    "url": "",
+    "summary": "Session identifier is not rotated after login, enabling fixation.",
+    "description": "The application accepts a pre-set session ID and does not issue a new one upon authentication.",
+    "impact": "Account takeover if attacker forces a victim to use a known session ID.",
+    "recommendation": "Regenerate session IDs after login, set secure cookie flags, and reduce session lifetime.",
+    "cwe": "CWE-384",
+    "reference": "https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/",
+    "steps": [
+      {"description": "Set a crafted session cookie, navigate to login, authenticate.", "screenshot": ""},
+      {"description": "Verify session ID remains unchanged post-authentication.", "screenshot": ""}
+    ]
+  },
+  {
+    "id": "V-0006",
+    "title": "Cross-Site Request Forgery (CSRF)",
+    "cvss": "6.5",
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:H/A:N",
+    "severity": "Medium",
+    "url": "",
+    "summary": "State-changing endpoints lack CSRF protection.",
+    "description": "Sensitive POST/PUT/DELETE endpoints can be triggered via a victim’s authenticated browser without CSRF tokens.",
+    "impact": "Unauthorized state changes (password, email, funds transfer).",
+    "recommendation": "Enforce server-side CSRF tokens, same-site cookies, and check Origin/Referer headers.",
+    "cwe": "CWE-352",
+    "reference": "https://owasp.org/www-community/attacks/csrf",
+    "steps": [
+      {"description": "Craft an auto-submitting form to call the target endpoint.", "screenshot": ""},
+      {"description": "Open in victim session; confirm unintended action succeeds.", "screenshot": ""}
+    ]
+  },
+  {
+    "id": "V-0007",
+    "title": "Server-Side Request Forgery (SSRF)",
+    "cvss": "8.2",
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:L",
+    "severity": "High",
+    "url": "",
+    "summary": "Backend fetches attacker-controlled URLs, enabling access to internal services/metadata.",
+    "description": "The application accepts arbitrary URLs and the server retrieves them, allowing pivoting to internal network and cloud metadata.",
+    "impact": "Access internal endpoints, exfiltrate credentials, potential RCE in chained scenarios.",
+    "recommendation": "Use allowlists, block private address ranges, and enforce SSRF-safe libraries.",
+    "cwe": "CWE-918",
+    "reference": "https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_(SSRF)/",
+    "steps": [
+      {"description": "Submit URL `http://169.254.169.254/latest/meta-data/` (cloud env) or internal host.", "screenshot": ""},
+      {"description": "Confirm internal response returned to client.", "screenshot": ""}
+    ]
+  },
+  {
+    "id": "V-0008",
+    "title": "Unrestricted File Upload",
+    "cvss": "8.6",
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:N",
+    "severity": "High",
+    "url": "",
+    "summary": "Insufficient validation on uploaded files permits executable or script content.",
+    "description": "Upload endpoint accepts dangerous types without server-side content checks or reprocessing.",
+    "impact": "Arbitrary script execution, malware persistence, or data exposure.",
+    "recommendation": "Enforce allowlist MIME/extension checks, re-encode images, store outside web root, and randomize names.",
+    "cwe": "CWE-434",
+    "reference": "https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload",
+    "steps": [
+      {"description": "Upload a polyglot or script file; observe it is accepted and reachable.", "screenshot": ""},
+      {"description": "Access uploaded file path and confirm execution/processing.", "screenshot": ""}
+    ]
+  },
+  {
+    "id": "V-0009",
+    "title": "Clickjacking",
+    "cvss": "4.3",
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+    "severity": "Low",
+    "url": "",
+    "summary": "Application can be framed by external sites, enabling UI redress attacks.",
+    "description": "Missing X-Frame-Options/Content-Security-Policy allows the app to load in an iframe.",
+    "impact": "Trick users into unintended clicks, change settings, or submit forms.",
+    "recommendation": "Set `X-Frame-Options: DENY` or CSP `frame-ancestors 'none'`.",
+    "cwe": "CWE-1021",
+    "reference": "https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html",
+    "steps": [
+      {"description": "Host a page embedding target in an iframe with overlayed UI.", "screenshot": ""},
+      {"description": "Demonstrate unintended interaction by user.", "screenshot": ""}
+    ]
+  }
+]

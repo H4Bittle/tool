@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Login | H4 B.I.T.T.L.E{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="card p-4 shadow" style="min-width: 300px; max-width: 400px;">
+        <h3 class="text-center mb-4">H4 B.I.T.T.L.E</h3>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control", placeholder="Enter username") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control", placeholder="Enter password") }}
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

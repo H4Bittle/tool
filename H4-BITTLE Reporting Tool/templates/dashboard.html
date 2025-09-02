@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | H4 B.I.T.T.L.E{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4 text-center">Dashboard Analytics</h2>
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-2">
+            <a href="{{ url_for('applications_page') }}" class="text-decoration-none">
+                <div class="card bg-primary text-white text-center p-3 square-card">
+                    <h5>Total Applications</h5>
+                    <p id="totalApps">0</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('vulnerabilities_summary_page') }}" class="text-decoration-none">
+                <div class="card bg-danger text-white text-center p-3 square-card">
+                    <h5>Total Vulnerabilities</h5>
+                    <p id="totalVulns">0</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('applications_page') }}" class="text-decoration-none">
+                <div class="card bg-success text-white text-center p-3 square-card">
+                    <h5>Applications Completed</h5>
+                    <p id="completedApps">0</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('applications_page') }}" class="text-decoration-none">
+                <div class="card bg-info text-white text-center p-3 square-card">
+                    <h5>Applications In Progress</h5>
+                    <p id="inProgressApps">0</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <h3 class="mt-5 mb-4 text-center">Vulnerability Analytics</h3>
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-2">
+            <a href="{{ url_for('vulnerabilities_summary_page') }}" class="text-decoration-none">
+                <div class="card text-white text-center p-3 square-card" style="background-color: #800000;">
+                    <h5>Critical Count</h5>
+                    <p id="criticalVulns">0</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('vulnerabilities_summary_page') }}" class="text-decoration-none">
+                <div class="card bg-danger text-white text-center p-3 square-card">
+                    <h5>High Vuln Count</h5>
+                    <p id="highVulns">0</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('vulnerabilities_summary_page') }}" class="text-decoration-none">
+                <div class="card text-white text-center p-3 square-card" style="background-color: #ff8c00;">
+                    <h5>Medium Count</h5>
+                    <p id="mediumVulns">0</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('vulnerabilities_summary_page') }}" class="text-decoration-none">
+                <div class="card bg-success text-white text-center p-3 square-card">
+                    <h5>Low Count</h5>
+                    <p id="lowVulns">0</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h3 class="text-center mb-4">Applications Added Per Month</h3>
+        <canvas id="appsChart" height="100" style="height:340px;"></canvas>
+    </div>
+</div>
+
+<style>
+    .square-card {
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: 12px;
+        cursor: pointer;
+    }
+    .square-card h5 {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+    /* ensure canvas actually has space when Chart.js is responsive, and cap height */
+    #appsChart {
+        max-width: 100%;
+        height: 340px !important;
+        max-height: 340px !important;
+        width: 100% !important;
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const FIXED_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+        // --- Applications summary + chart ---
+        fetch("/api/applications_summary")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("totalApps").textContent = data.total ?? 0;
+                document.getElementById("completedApps").textContent = data.completed ?? 0;
+                document.getElementById("inProgressApps").textContent = data.in_progress ?? 0;
+
+                const monthly = data.monthly ?? {};
+                let valuesOrdered;
+
+                if (Array.isArray(monthly) && monthly.length === 12) {
+                    // Backend already returns [Jan..Dec]
+                    valuesOrdered = monthly.map(n => Number(n) || 0);
+                } else {
+                    // Map dict-like structures: {'Jan':2, '02':1, 3:0, ...}
+                    const indexByName = {
+                        jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11,
+                        january:0,february:1,march:2,april:3,mayy:4,june:5,july:6,august:7,september:8,october:9,november:10,december:11
+                    };
+                    const toIndex = (k) => {
+                        const s = String(k ?? '').trim();
+                        const byName = indexByName[s.toLowerCase()];
+                        if (byName != null) return byName;
+                        const n = Number(s);
+                        if (!Number.isNaN(n) && n >= 1 && n <= 12) return n - 1; // 1..12 -> 0..11
+                        return -1;
+                    };
+                    valuesOrdered = Array(12).fill(0);
+                    Object.keys(monthly).forEach(k => {
+                        const i = toIndex(k);
+                        if (i >= 0) valuesOrdered[i] = Number(monthly[k]) || 0;
+                    });
+                }
+
+                const ctx = document.getElementById("appsChart").getContext("2d");
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: FIXED_MONTHS,
+                        datasets: [{
+                            label: "Apps Added",
+                            data: valuesOrdered,
+                            backgroundColor: 'rgba(0, 123, 255, 0.55)',
+                            borderColor: '#007bff',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                suggestedMax: 20,
+                                ticks: {
+                                    stepSize: 2,
+                                    callback: (v) => Number.isInteger(v) ? v : null
+                                },
+                                title: { display: true, text: 'Number of Applications' }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            })
+            .catch(console.error);
+
+        // --- Vulnerability summary cards ---
+        fetch("/api/vulnerabilities_summary")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("totalVulns").textContent   = data.total ?? 0;
+                document.getElementById("criticalVulns").textContent= data.critical ?? 0;
+                document.getElementById("highVulns").textContent    = data.high ?? 0;
+                document.getElementById("mediumVulns").textContent  = data.medium ?? 0;
+                document.getElementById("lowVulns").textContent     = data.low ?? 0;
+            })
+            .catch(console.error);
+    });
+</script>
+{% endblock %}

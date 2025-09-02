@@ -1,0 +1,98 @@
+[
+  {
+    "id": "A1",
+    "title": "asdasd",
+    "cvss": "6.0",
+    "cvss_vector": "asdasd",
+    "severity": "Medium",
+    "url": "http://example.com",
+    "summary": "wqeqweqweqweqwe",
+    "description": "qwerqweqweqweqe",
+    "impact": "qweqeqweqe",
+    "recommendation": "qweqweqweqweqweqewq",
+    "cwe": "2024",
+    "reference": "1231323qasdsdadasda",
+    "steps": [
+      {
+        "description": "asdasdasdasdasd",
+        "screenshot": ""
+      }
+    ]
+  },
+  {
+    "id": "A2",
+    "title": "SQLI",
+    "cvss": "8",
+    "cvss_vector": "asdasd",
+    "severity": "High",
+    "url": "http://example1.com",
+    "summary": "ASDASDASD",
+    "description": "ASDASD",
+    "impact": "ASDASD",
+    "recommendation": "ASDASDADS",
+    "cwe": "ASDASD",
+    "reference": "ASDADAS",
+    "steps": [
+      {
+        "description": "ASDADAS",
+        "screenshot": ""
+      },
+      {
+        "description": "AASD2ASDDA",
+        "screenshot": ""
+      },
+      {
+        "description": "ASDASDASD",
+        "screenshot": ""
+      }
+    ]
+  },
+  {
+    "id": "A3",
+    "title": "asdasd",
+    "cvss": "9.5",
+    "cvss_vector": "ASDAD",
+    "severity": "Critical",
+    "url": "http://example.com",
+    "summary": "ASDADSASD",
+    "description": "ASDADASD",
+    "impact": "ASDASDASDASD",
+    "recommendation": "ASDASD",
+    "cwe": "2023",
+    "reference": "ASDASDASD",
+    "steps": [
+      {
+        "description": "SDSDSD",
+        "screenshot": ""
+      },
+      {
+        "description": "SSRF2",
+        "screenshot": ""
+      }
+    ]
+  },
+  {
+    "id": "A4",
+    "title": "asdasd",
+    "cvss": "9.1",
+    "cvss_vector": "adasd",
+    "severity": "",
+    "url": "http://example1.com",
+    "summary": "asdasd",
+    "description": "asaaaaaaaaaaaaaaaa",
+    "impact": "bbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recommendation": "ccccccccccccccccccccccccccccccc",
+    "cwe": "2025",
+    "reference": "ddddddddddddddddddddddddddddddddddddddddd",
+    "steps": [
+      {
+        "description": "aaasdadsdadsadasda",
+        "screenshot": "edit_vuln3_step0_ssrf1.png"
+      },
+      {
+        "description": "pokntgvces",
+        "screenshot": "edit_vuln3_step1_sqli3.png"
+      }
+    ]
+  }
+]

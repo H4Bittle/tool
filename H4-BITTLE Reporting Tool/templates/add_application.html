@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block title %}Add Application | H4 B.I.T.T.L.E{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">Add Application</h2>
+
+    <script>
+        document.cookie = "csrf_access_token={{ csrf_token() }}";
+    </script>
+
+    <form id="appForm">
+        <div class="mb-3">
+            <label class="form-label">Main Application Name</label>
+            <input type="text" class="form-control" id="app_name" required>
+        </div>
+
+        <h5 class="mt-4">Applications Under Scope</h5>
+        <div id="appDetailsGroup">
+            <div class="row g-2 align-items-center mb-2">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="app_url" placeholder="Application URL" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="app_version" placeholder="Version" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="app_display_name" placeholder="App Display Name" required>
+                </div>
+                <div class="col-md-1 d-flex">
+                    <button class="btn btn-outline-secondary me-1 add-app-details" type="button">+</button>
+                    <button class="btn btn-outline-danger remove-app-details" type="button">-</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Start Date</label>
+            <input type="date" class="form-control" id="start_date" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">End Date</label>
+            <input type="date" class="form-control" id="end_date" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-control" id="status" required>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="on-hold">On Hold</option>
+                <option value="in-pipeline">In Pipeline</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+
+        <h5 class="mt-4">Pentester Details</h5>
+        <div id="pentesterGroup">
+            <div class="row g-2 align-items-center mb-2">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="pentester_name" placeholder="Name" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="pentester_role" placeholder="Role" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="email" class="form-control" name="pentester_email" placeholder="Email" required>
+                </div>
+                <div class="col-md-2 d-flex">
+                    <button class="btn btn-outline-secondary me-1 add-pentester" type="button">+</button>
+                    <button class="btn btn-outline-danger remove-pentester" type="button">-</button>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="mt-4">Testing Credentials</h5>
+        <div id="credentialsGroup">
+            <div class="row g-2 align-items-center mb-2">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="cred_name" placeholder="Username" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="cred_role" placeholder="Role" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="email" class="form-control" name="cred_email" placeholder="Email-ID" required>
+                </div>
+                <div class="col-md-2 d-flex">
+                    <button class="btn btn-outline-secondary me-1 add-cred" type="button">+</button>
+                    <button class="btn btn-outline-danger remove-cred" type="button">-</button>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-4">Save Application</button>
+    </form>
+</div>
+
+<script>
+    function getCSRFToken() {
+        return document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrf_access_token='))
+            ?.split('=')[1] || '';
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("appForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const urls = Array.from(document.getElementsByName("app_url")).map(input => input.value);
+            const versions = Array.from(document.getElementsByName("app_version")).map(input => input.value);
+            const displayNames = Array.from(document.getElementsByName("app_display_name")).map(input => input.value);
+
+            const app_details = urls.map((url, i) => ({
+                url,
+                version: versions[i],
+                name: displayNames[i]
+            }));
+
+            const pentesters = [];
+            const names = document.getElementsByName("pentester_name");
+            const roles = document.getElementsByName("pentester_role");
+            const emails = document.getElementsByName("pentester_email");
+
+            for (let i = 0; i < names.length; i++) {
+                pentesters.push({
+                    name: names[i].value,
+                    role: roles[i].value,
+                    email: emails[i].value
+                });
+            }
+
+            const credentials = [];
+            const credNames = document.getElementsByName("cred_name");
+            const credRoles = document.getElementsByName("cred_role");
+            const credEmails = document.getElementsByName("cred_email");
+
+            for (let i = 0; i < credNames.length; i++) {
+                if (credNames[i].value && credRoles[i].value && credEmails[i].value) {
+                    credentials.push({
+                        name: credNames[i].value,
+                        role: credRoles[i].value,
+                        email: credEmails[i].value
+                    });
+                }
+            }
+
+            const payload = {
+                id: crypto.randomUUID(),
+                name: document.getElementById("app_name").value,
+                start_date: document.getElementById("start_date").value,
+                end_date: document.getElementById("end_date").value,
+                status: document.getElementById("status").value,
+                app_details: app_details,
+                pentesters: pentesters,
+                test_credentials: credentials
+            };
+
+            fetch("/add_application", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = `/add_vulnerability/${payload.id}`;
+                } else {
+                    alert("Failed to save application.");
+                }
+            })
+            .catch(err => {
+                console.error("Fetch failed:", err);
+                alert("Failed to send application data.");
+            });
+        });
+
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("add-pentester")) {
+                const group = document.getElementById("pentesterGroup");
+                const clone = e.target.closest(".row").cloneNode(true);
+                group.appendChild(clone);
+            } else if (e.target.classList.contains("remove-pentester")) {
+                const group = document.getElementById("pentesterGroup");
+                if (group.children.length > 1) {
+                    e.target.closest(".row").remove();
+                }
+            } else if (e.target.classList.contains("add-app-details")) {
+                const group = document.getElementById("appDetailsGroup");
+                const clone = e.target.closest(".row").cloneNode(true);
+                group.appendChild(clone);
+            } else if (e.target.classList.contains("remove-app-details")) {
+                const group = document.getElementById("appDetailsGroup");
+                if (group.children.length > 1) {
+                    e.target.closest(".row").remove();
+                }
+            } else if (e.target.classList.contains("add-cred")) {
+                const group = document.getElementById("credentialsGroup");
+                const clone = e.target.closest(".row").cloneNode(true);
+                group.appendChild(clone);
+            } else if (e.target.classList.contains("remove-cred")) {
+                const group = document.getElementById("credentialsGroup");
+                if (group.children.length > 1) {
+                    e.target.closest(".row").remove();
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

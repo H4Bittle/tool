@@ -1,0 +1,59 @@
+{
+  "id": "d03bf1e3-317a-4824-9126-5583c8a48358",
+  "name": "Pre Mature Assessment of Null Application 2",
+  "description": "",
+  "start_date": "09-08-2025",
+  "end_date": "30-08-2025",
+  "status": "in-progress",
+  "app_details": [
+    {
+      "url": "http://example.com",
+      "version": "2.5",
+      "name": "test_app1"
+    },
+    {
+      "url": "http://example2.com",
+      "version": "2.5",
+      "name": "test_app2"
+    },
+    {
+      "url": "http://example3.com",
+      "version": "2.5",
+      "name": "test_app3"
+    }
+  ],
+  "pentesters": [
+    {
+      "name": "pen1",
+      "role": "test",
+      "email": "test1@test.com"
+    },
+    {
+      "name": "pen2",
+      "role": "test",
+      "email": "test2@test.com"
+    },
+    {
+      "name": "pen3",
+      "role": "test",
+      "email": "test3@test.com"
+    }
+  ],
+  "test_credentials": [
+    {
+      "name": "test1asdfgh",
+      "role": "admin",
+      "email": "test1@test.com"
+    },
+    {
+      "name": "test2asdfgh",
+      "role": "admin",
+      "email": "test2@test.com"
+    },
+    {
+      "name": "test3asdfgh",
+      "role": "admin",
+      "email": "test3@test.com"
+    }
+  ]
+}
